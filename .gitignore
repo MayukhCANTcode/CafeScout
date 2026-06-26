@@ -1,0 +1,28 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+CafeScout/node_modules/
+
+# Production builds
+dist/
+CafeScout/dist/
+
+# Local env files
+.env
+.env*.local
+CafeScout/.env
+CafeScout/.env*.local
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
