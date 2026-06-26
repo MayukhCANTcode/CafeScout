@@ -1,98 +1,82 @@
-// Import the CafeCard component.
-// We'll use this component to display each individual cafe.
+// =====================================================
+// CAFE LIST
+// =====================================================
+//
+// Displays cafes.
+//
+// Search is now controlled by App.
+//
+// =====================================================
+
 import CafeCard from "./CafeCard";
 
-// CafeList receives one prop:
-// setSelectedCafe -> A function passed from the parent component (Layout).
-// Whenever a user clicks on a cafe card,
-// this function updates which cafe is currently selected.
-function CafeList({ setSelectedCafe }) {
+function CafeList({
 
-  // This is a temporary array of cafe data.
-  // Right now the data is hardcoded.
-  // Later we'll replace this with real data fetched from an API.
-  const cafes = [
-    {
-      id: 1,                 // Unique ID for React
-      name: "Cafe Coffee Day",
-      rating: 4.4,
-      distance: "1.2 km",
+  cafes,
 
-      // Latitude & Longitude
-      // Used by the map to know where this cafe is located.
-      lat: 24.7588,
-      lng: 92.7865,
-    },
+  searchText,
 
-    {
-      id: 2,
-      name: "Cafe HQ",
-      rating: 4.6,
-      distance: "2.1 km",
-      lat: 24.7615,
-      lng: 92.7897,
-    },
+  setSelectedCafe,
 
-    {
-      id: 3,
-      name: "Beans & Brews",
-      rating: 4.5,
-      distance: "2.8 km",
-      lat: 24.7644,
-      lng: 92.7829,
-    },
-  ];
+}) {
+
+  // Filter cafes using the global search text.
+  const filteredCafes = cafes.filter((cafe)=>
+
+    cafe.name
+
+      .toLowerCase()
+
+      .includes(
+
+        searchText.toLowerCase()
+
+      )
+
+  );
 
   return (
+
     <div>
 
-      {/* Sidebar Heading */}
-      <h2 className="mb-6 text-3xl font-bold text-[#2E2E2E]">
+      <h2 className="mb-6 text-3xl font-bold">
+
         Nearby Cafés
+
       </h2>
 
-      {/* 
-        cafes.map() loops through every cafe inside the array.
+      {filteredCafes.length===0 && (
 
-        Example:
+        <div className="rounded-xl bg-gray-100 p-6 text-center">
 
-        cafes = [Cafe1, Cafe2, Cafe3]
+          ☕
 
-        React will automatically create:
+          <br />
 
-        <CafeCard />
-        <CafeCard />
-        <CafeCard />
+          No cafés found.
 
-        One card for every cafe.
-      */}
-      {cafes.map((cafe) => (
+        </div>
 
-        // Create one CafeCard component
-        // and pass the cafe information to it.
+      )}
+
+      {filteredCafes.map((cafe)=>(
+
         <CafeCard
 
-          // React uses key to uniquely identify each item.
-          // It helps React efficiently update the UI.
           key={cafe.id}
 
-          // Pass the entire cafe object.
-          // Inside CafeCard we can access:
-          // cafe.name
-          // cafe.rating
-          // cafe.distance
-          // cafe.lat
-          // cafe.lng
           cafe={cafe}
 
-          // Pass the function that updates
-          // which cafe is selected.
           setSelectedCafe={setSelectedCafe}
+
         />
+
       ))}
 
     </div>
+
   );
+
 }
 
 export default CafeList;

@@ -1,127 +1,87 @@
-// Import useState from React.
-// We use it to store data that can change while the app is running.
+// =====================================================
+// LAYOUT COMPONENT
+// =====================================================
+//
+// Responsibilities:
+//
+// • Store selected cafe
+// • Store all cafes
+// • Pass cafes to MapView
+// • Pass cafes to CafeList
+//
+// =====================================================
+
 import { useState } from "react";
 
-// Import the Map component.
-// This component displays the interactive map.
 import MapView from "./MapView";
-
-// Import the CafeList component.
-// This component displays all the cafe cards.
 import CafeList from "./CafeList";
 
-// Layout is responsible for displaying
-// both the map and the cafe list side by side.
-function Layout() {
+// Import dummy cafes.
+// Later this can be replaced with API data.
+import cafesData from "../data/cafes";
 
-  // ---------------- STATE ----------------
+function Layout({
 
-  // selectedCafe stores the cafe that the user clicks.
-  //
-  // Initially:
-  // selectedCafe = null
-  //
-  // After clicking a cafe:
-  // selectedCafe = {
-  //    id: 1,
-  //    name: "...",
-  //    rating: ...
-  // }
-  //
-  // Whenever selectedCafe changes,
-  // React automatically re-renders this component.
+  currentLocation,
+
+  searchText,
+
+}) {
+
+  // =====================================================
+  // STATE
+  // =====================================================
+
+  // Stores the currently selected cafe.
   const [selectedCafe, setSelectedCafe] = useState(null);
+
+  // Stores every cafe.
+  // Later this can be updated using an API.
+  const [cafes] = useState(cafesData);
 
   return (
 
-    // ---------------- MAIN LAYOUT ----------------
-    // Creates a horizontal layout using Flexbox.
-    //
-    // +-------------------------------+-------------+
-    // |                               |             |
-    // |            Map                |  Cafe List  |
-    // |                               |             |
-    // +-------------------------------+-------------+
     <section className="mx-auto flex max-w-7xl gap-6 px-8 py-12">
 
-      {/* ---------------- MAP SECTION ---------------- */}
+      {/* ================= MAP ================= */}
 
-      {/* 
-        flex-1
-        Makes the map take all the remaining available space.
-
-        overflow-hidden
-        Prevents the map from overflowing outside its rounded corners.
-
-        rounded-3xl
-        Gives large rounded corners.
-
-        shadow-xl
-        Adds a large shadow to make it look like a card.
-      */}
       <div className="flex-1 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-xl">
 
-        {/* 
-          Pass selectedCafe to MapView.
+        <MapView
 
-          Whenever selectedCafe changes,
-          MapView receives the updated cafe.
+          currentLocation={currentLocation}
 
-          Example:
+          selectedCafe={selectedCafe}
 
-          selectedCafe
+          cafes={cafes}
 
-                ↓
-
-            MapView
-
-                ↓
-
-          flyTo(selectedCafe)
-        */}
-        <MapView selectedCafe={selectedCafe} />
+        />
 
       </div>
 
-      {/* ---------------- SIDEBAR ---------------- */}
 
-      {/* Sidebar containing all cafe cards */}
+
+      {/* ================= SIDEBAR ================= */}
+
       <div className="w-96 rounded-2xl bg-white p-8 shadow-lg">
 
-        {/*
-          Pass setSelectedCafe to CafeList.
+        <CafeList
 
-          CafeList itself does NOT change the state.
+          cafes={cafes}
 
-          Instead, it passes this function down
-          to every CafeCard.
 
-          Flow:
+          searchText={searchText}
 
-          CafeCard Click
+          setSelectedCafe={setSelectedCafe}
 
-                ↓
-
-          setSelectedCafe(cafe)
-
-                ↓
-
-          Layout updates selectedCafe
-
-                ↓
-
-          MapView receives new selectedCafe
-
-                ↓
-
-          Map flies to that cafe
-        */}
-        <CafeList setSelectedCafe={setSelectedCafe} />
+        />
 
       </div>
 
     </section>
+
   );
+
 }
 
 export default Layout;
